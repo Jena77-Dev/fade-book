@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const SettingsSchema = new mongoose.Schema({
+  settingsType: { type: String, default: "shop" },
   shopName: { type: String, default: "My Salon" },
   phone: String,
   address: String,
@@ -8,6 +9,7 @@ const SettingsSchema = new mongoose.Schema({
   closeTime: { type: String, default: "21:00" },
   slotDuration: { type: Number, default: 30 }, // minutes
   closedDays: [String], // ["Sunday"]
+  email: String,
 }, { timestamps: true });
 
 export default mongoose.models.Settings || mongoose.model("Settings", SettingsSchema);

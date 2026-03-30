@@ -1,16 +1,4 @@
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# FadeBook - Barbershop Booking System
 
 A complete, production-ready full-stack barbershop booking application built for Indian barbershops with modern tech stack.
 
@@ -82,6 +70,28 @@ A complete, production-ready full-stack barbershop booking application built for
 6. **settings** - Shop configuration
 7. **users** - Admin/Barber accounts (for future auth)
 
+## 🔐 Authentication System
+
+The application now includes a complete authentication system for all user roles:
+
+### User Roles:
+1. **Customer** - Can book appointments and view booking history
+2. **Barber** - Can view and manage their daily schedule
+3. **Admin** - Full access to manage shop, services, barbers, and appointments
+
+### Demo Credentials:
+- **Admin**: `admin@fadebook.com` / `admin123`
+- **Barber**: `barber@fadebook.com` / `barber123`
+- **Customer**: `customer@fadebook.com` / `customer123`
+
+### Features:
+- ✅ Login & Registration for all roles
+- ✅ Role-based access control (protected routes)
+- ✅ Customer booking history (`/my-bookings`)
+- ✅ Automatic user info pre-fill in booking form
+- ✅ Login/Logout buttons in navigation
+- ✅ Session persistence with localStorage
+
 ## 🚀 Getting Started
 
 ### 1. Start the Application
@@ -103,7 +113,7 @@ cd /app && node seed.js
 
 The seed script populates:
 - **8 Services**: Regular Haircut (₹200), Fade Cut (₹300), Beard Trim (₹150), Shave (₹100), Hair Color (₹800), Head Massage (₹150), Kids Haircut (₹150), Bridal Package (₹1500)
-- **4 Barbers**: Rajesh Kumar, Amit Sharma, Vikram Singh, Suresh Patel
+- **4 Barbers**: Rajesh Kumar, Amit Sharma, Vikram Singh, Suresh Patel, Mukesh Vishe, Pravin Bhatt
 
 ## 🔗 API Endpoints
 
@@ -130,6 +140,13 @@ The seed script populates:
 
 ### Dashboard
 - `GET /api/dashboard/stats` - Get admin dashboard statistics
+
+### Barber Dashboard
+-`GET /api/barber/profile?email`
+-`GET /api/barber/stats?barberId`
+-`GET /api/barber/schedule?barberId&date`
+-`GET /api/barber/earnings?barberId&period=month`
+-`PUT /api/appointments/:id  → { status: "completed" }`
 
 ### Settings
 - `GET /api/settings` - Get shop settings
@@ -223,4 +240,4 @@ Proprietary - Built for FadeBook Barbershop
 
 ---
 
-**Built with ❤️ for Indian Barbershops** 🇮🇳
+**Built with ❤️ for Indian Barbershops by jenaDev** 🇮🇳

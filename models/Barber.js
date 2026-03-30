@@ -5,9 +5,10 @@ const BarberSchema = new mongoose.Schema({
   name: { type: String, required: true },
   specialty: String,
   experience: Number,
+  email: { type: String, unique: true, sparse: true },
   phone: String,
   photo: String,
-  rating: { type: Number, default: 0 },
+  rating: { type: Number, default: 4.8 },
   totalBookings: { type: Number, default: 0 },
   active: { type: Boolean, default: true },
   workingHours: {
