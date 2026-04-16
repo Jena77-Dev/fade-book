@@ -17,6 +17,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
+import api from "@/lib/api";
 
 export default function BarberPage() {
   const router = useRouter();
@@ -55,8 +56,9 @@ export default function BarberPage() {
   // ==================== API Calls ====================
   const fetchBarberProfile = async (email) => {
     try {
-      const response = await fetch(`/api/barber/profile?email=${email}`);
-      const data = await response.json();
+      // const response = await fetch(`/api/barber/profile?email=${email}`);
+      const data = await api.get(`/barber/profile?email=${email}`);
+      // const data = await response.json();
       if (data.success) {
         setBarber(data.barber);
       } else {
@@ -73,9 +75,8 @@ export default function BarberPage() {
   const fetchSchedule = async () => {
     try {
       const dateStr = selectedDate.toISOString().split("T")[0];
-      const response = await fetch(
-        `/api/barber/schedule?barberId=${barber._id}&date=${dateStr}`
-      );
+      // const response = await fetch(`/api/barber/schedule?barberId=${barber._id}&date=${dateStr}`);
+      const response = await api.get(`/barber/schedule?barberId=${barber._id}&date=${dateStr}`);
       const data = await response.json();
       if (data.success) setAppointments(data.appointments || []);
     } catch (error) {
@@ -85,11 +86,7 @@ export default function BarberPage() {
 
   const updateStatus = async (id, status) => {
     try {
-      await fetch(`/api/appointments/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      });
+      await api.put(`/appointments/${id}`, { status });
       fetchSchedule();
     } catch (error) {
       console.error("Update error:", error);

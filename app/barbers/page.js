@@ -16,8 +16,9 @@ export default function BarbersPage() {
 
   const fetchBarbers = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/barbers');
-      const data = await res.json();
+      // const res = await fetch('http://localhost:3000/api/barbers');
+      const data = await api.get('/barbers');
+      // const data = await res.json();
       console.log("Barbers data:", data);
       
       setBarbers(data.barbers || []);

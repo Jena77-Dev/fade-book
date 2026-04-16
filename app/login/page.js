@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import api from "lib/api";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,9 +47,16 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      // const res = await fetch("/api/auth/login", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     email: loginData.email,
+      //     password: loginData.password,
+      //   }),
+      // });
+
+      const res = await api.post("/auth/login", {
         body: JSON.stringify({
           email: loginData.email,
           password: loginData.password,
@@ -89,9 +97,19 @@ export default function LoginPage() {
     }
 
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      // const res = await fetch("/api/auth/register", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     name: registerData.name,
+      //     email: registerData.email,
+      //     phone: registerData.phone,
+      //     password: registerData.password,
+      //     role: "customer",
+      //   }),
+      // });
+
+      const res = await api.post("/auth/register", {
         body: JSON.stringify({
           name: registerData.name,
           email: registerData.email,

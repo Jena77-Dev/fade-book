@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import api from "lib/api";
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,8 +30,9 @@ export default function MyBookingsPage() {
   const fetchBookings = async (userData) => {
     try {
       // Fetch appointments for this customer
-      const res = await fetch(`http://localhost:3000/api/appointments?customerEmail=${userData.email}`);
-      const data = await res.json();
+      // const res = await fetch(`http://localhost:3000/api/appointments?customerEmail=${userData.email}`);
+      const data = await api.get(`/appointments?customerEmail=${userData.email}`);
+      // const data = await res.json();
       setBookings(data.appointments || []);
     } catch (error) {
       console.error('Error:', error);

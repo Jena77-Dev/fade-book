@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import api from "lib/api";
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,8 +19,9 @@ export default function ServicesPage() {
 
   const fetchServices = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/services');
-      const data = await res.json();
+      // const res = await fetch('http://localhost:3000/api/services');
+      const data = await api.get('/services');
+      // const data = await res.json();
       setServices(data.services || []);
     } catch (error) {
       console.error('Error:', error);

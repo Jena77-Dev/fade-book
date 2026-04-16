@@ -6,21 +6,8 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Scissors,
-  Calendar,
-  Clock,
-  Users,
-  Star,
-  ChevronRight,
-  Languages,
-  MapPin,
-  Phone,
-  Mail,
-  Sparkles,
-  Menu,
-  X,
-} from "lucide-react";
+import api from "@/lib/api";
+import { Scissors, Calendar, Clock, Users, Star, ChevronRight, Languages, MapPin, Phone, Mail, Sparkles, Menu, X } from "lucide-react";
 
 export default function HomePage() {
   const router = useRouter();
@@ -43,15 +30,20 @@ export default function HomePage() {
 
   const fetchData = async () => {
     try {
-      const [servicesRes, barbersRes, settingsRes] = await Promise.all([
-        fetch("/api/services"),
-        fetch("/api/barbers"),
-        fetch("/api/settings"),
+      // const [servicesRes, barbersRes, settingsRes] = await Promise.all([
+      const [servicesData, barbersData, settingsData] = await Promise.all([
+        // fetch("/api/services"),
+        // fetch("/api/barbers"),
+        // fetch("/api/settings"),
+
+        api.get("/services"),
+        api.get("/barbers"),
+        api.get("/settings"),
       ]);
 
-      const servicesData = await servicesRes.json();
-      const barbersData = await barbersRes.json();
-      const settingsData = await settingsRes.json();
+      // const servicesData = await servicesRes.json();
+      // const barbersData = await barbersRes.json();
+      // const settingsData = await settingsRes.json();
 
       setServices(servicesData.services?.slice(0, 6) || []);
       setBarbers(barbersData.barbers?.slice(0, 3) || []);

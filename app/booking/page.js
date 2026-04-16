@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import api from 'lib/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -75,14 +76,27 @@ export default function BookingPage() {
     }
   }, [selectedBarber, selectedDate]);
 
+  // const fetchServicesAndBarbers = async () => {
+  //   try {
+  //     const [servicesRes, barbersRes] = await Promise.all([
+  //       fetch('http://localhost:3000/api/services'),
+  //       fetch('http://localhost:3000/api/barbers')
+  //     ]);
+  //     const servicesData = await servicesRes.json();
+  //     const barbersData = await barbersRes.json();
+  //     setServices(servicesData.services || []);
+  //     setBarbers(barbersData.barbers || []);
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
   const fetchServicesAndBarbers = async () => {
     try {
-      const [servicesRes, barbersRes] = await Promise.all([
-        fetch('http://localhost:3000/api/services'),
-        fetch('http://localhost:3000/api/barbers')
+      const [servicesData, barbersData] = await Promise.all([
+        api.get('/services'),
+        api.get('/barbers')
       ]);
-      const servicesData = await servicesRes.json();
-      const barbersData = await barbersRes.json();
       setServices(servicesData.services || []);
       setBarbers(barbersData.barbers || []);
     } catch (error) {
@@ -93,8 +107,9 @@ export default function BookingPage() {
   const fetchAvailableSlots = async () => {
     try {
       const dateStr = format(selectedDate, 'yyyy-MM-dd');
-      const res = await fetch(`http://localhost:3000/api/availability?barberId=${selectedBarber._id}&date=${dateStr}`);
-      const data = await res.json();
+      // const res = await fetch(`http://localhost:3000/api/availability?barberId=${selectedBarber._id}&date=${dateStr}`);
+      const data = await api.get(`/availability?barberId=${selectedBarber._id}&date=${dateStr}`);
+      // const data = await res.json();
       setAvailableSlots(data.availableSlots || []);
     } catch (error) {
       console.error('Error:', error);
@@ -163,13 +178,15 @@ export default function BookingPage() {
         notes: ''
       };
 
-      const res = await fetch('http://localhost:3000/api/appointments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(appointment)
-      });
+      // const res = await fetch('http://localhost:3000/api/appointments', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(appointment)
+      // });
 
-      const data = await res.json();
+      const data = await api.post('/appointments', appointment);
+
+      // const data = await res.json();
       
       if (res.ok) {
         setSuccess(true);

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -63,38 +64,34 @@ export default function AdminPage() {
   const fetchData = async () => {
     try {
       if (activeTab === 'dashboard') {
-        const res = await fetch('http://localhost:3000/api/dashboard/stats');
-        const data = await res.json();
+        // const res = await fetch('http://localhost:3000/api/dashboard/stats');
+        const data = await api.get('/dashboard/stats');
+        // const data = await res.json(); 
         setStats(data.stats || {});
       }
       
       if (activeTab === 'services') {
-        const res = await fetch('http://localhost:3000/api/services');
-        const data = await res.json();
+        const data = await api.get('/services');
         setServices(data.services || []);
       }
       
       if (activeTab === 'barbers') {
-        const res = await fetch('http://localhost:3000/api/barbers?all=true');
-        const data = await res.json();
+        const data = await api.get('/barbers?all=true');
         setBarbers(data.barbers || []);
       }
       
       if (activeTab === 'appointments') {
-        const res = await fetch('http://localhost:3000/api/appointments');
-        const data = await res.json();
+        const data = await api.get('/appointments');
         setAppointments(data.appointments || []);
       }
       
       if (activeTab === 'customers') {
-        const res = await fetch('http://localhost:3000/api/customers');
-        const data = await res.json();
+        const data = await api.get('/customers');
         setCustomers(data.customers || []);
       }
       
       if (activeTab === 'settings') {
-        const res = await fetch('http://localhost:3000/api/settings');
-        const data = await res.json();
+        const data = await api.get('/settings');
         setSettings(data.settings || {});
       }
     } catch (error) {
@@ -116,35 +113,49 @@ export default function AdminPage() {
     setShowBarberDialog(true); 
   };
 
+  // const handleSaveService = async (serviceData) => {
+  //   try {
+  //     const method = editingService ? 'PUT' : 'POST';
+  //     const url = editingService ? `http://localhost:3000/api/services/${editingService._id}` : 'http://localhost:3000/api/services';
+      
+  //     await fetch(url, {
+  //       method,
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(serviceData)  //     });
+      
+  //     setShowServiceDialog(false);
+  //     setEditingService(null);
+  //     fetchData();
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
+
   const handleSaveService = async (serviceData) => {
     try {
-      const method = editingService ? 'PUT' : 'POST';
-      const url = editingService ? `http://localhost:3000/api/services/${editingService._id}` : 'http://localhost:3000/api/services';
-      
-      await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(serviceData)
-      });
-      
+      if (editingService) {
+        await api.put(`/services/${editingService._id}`, serviceData);
+      } else {
+        await api.post("/services", serviceData);
+      }
+
       setShowServiceDialog(false);
       setEditingService(null);
       fetchData();
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   const handleSaveBarber = async (barberData) => {
     try {
-      const method = editingBarber ? 'PUT' : 'POST';
-      const url = editingBarber ? `http://localhost:3000/api/barbers/${editingBarber._id}` : 'http://localhost:3000/api/barbers';
-      
-      await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(barberData)
-      });
+
+      if(editingBarber){
+        await api.put(`/barbers/${editingBarber._id}`, barberData);
+      }else{
+        await api.post(`/barbers`, barberData)
+      }
       
       setShowBarberDialog(false);
       setEditingBarber(null);
@@ -157,7 +168,9 @@ export default function AdminPage() {
   const handleDeleteService = async (serviceId) => {
     if (confirm('Are you sure you want to delete this service?')) {
       try {
-        await fetch(`http://localhost:3000/api/services/${serviceId}`, { method: 'DELETE' });
+        // await fetch(`http://localhost:3000/api/services/${serviceId}`, { method: 'DELETE' });
+        await api.delete(`/services/${serviceId}`);
+
         fetchData();
       } catch (error) {
         console.error('Error:', error);
@@ -168,7 +181,8 @@ export default function AdminPage() {
   const handleDeleteBarber = async (barberId) => {
     if (confirm('Are you sure you want to deactivate this barber?')) {
       try {
-        await fetch(`http://localhost:3000/api/barbers/${barberId}`, { method: 'DELETE' });
+        // await fetch(`http://localhost:3000/api/barbers/${barberId}`, { method: 'DELETE' });
+        await api.delete(`/barbers/${barberId}`);
         fetchData();
       } catch (error) {
         console.error('Error:', error);
@@ -178,9 +192,13 @@ export default function AdminPage() {
 
   const updateAppointmentStatus = async (appointmentId, status) => {
     try {
-      await fetch(`http://localhost:3000/api/appointments/${appointmentId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      // await fetch(`http://localhost:3000/api/appointments/${appointmentId}`, {
+      //   method: 'PUT',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ status })
+      // });
+
+      await api.put(`/appointments/${appointmentId}`, {
         body: JSON.stringify({ status })
       });
       fetchData();
