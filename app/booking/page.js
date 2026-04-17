@@ -185,21 +185,22 @@ export default function BookingPage() {
       // });
 
       const data = await api.post('/appointments', appointment);
-
       // const data = await res.json();
       
-      if (res.ok) {
+      // if (res.ok) {
+      // Check for success property since interceptor returns response.data
+      if (data.success) {
         setSuccess(true);
         setTimeout(() => router.push('/'), 3000);
       } else {
-        alert(data.error || 'Booking failed');
+        alert(data.error || data.message || 'Booking failed');
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('Booking failed');
-    } finally {
-      setLoading(false);
-    }
+        console.error('Error:', error);
+        alert(error.response?.data?.message || 'Booking failed');
+      } finally {
+        setLoading(false);
+      }
   };
 
   if (success) {
