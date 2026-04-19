@@ -47,33 +47,20 @@ export default function LoginPage() {
     setError("");
 
     try {
-      // const res = await fetch("/api/auth/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     email: loginData.email,
-      //     password: loginData.password,
-      //   }),
-      // });
-
-      const res = await api.post("/auth/login", {
-        body: JSON.stringify({
-          email: loginData.email,
-          password: loginData.password,
-        }),
+      const data = await api.post("/auth/login", {
+        email: loginData.email,
+        password: loginData.password,
       });
-
-      const data = await res.json();
 
       if (data.success) {
         localStorage.setItem("user", JSON.stringify(data.user));
         redirectByRole(data.user.role);
       } else {
-        setError(data.error || "Login failed");
+        setError(data.error || data.message || "Login failed");
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("Login failed. Please try again.");
+      setError(error.response?.data?.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -110,18 +97,24 @@ export default function LoginPage() {
       // });
 
       const res = await api.post("/auth/register", {
-        body: JSON.stringify({
-          name: registerData.name,
-          email: registerData.email,
-          phone: registerData.phone,
-          password: registerData.password,
-          role: "customer",
-        }),
+        // body: JSON.stringify({
+        //   name: registerData.name,
+        //   email: registerData.email,
+        //   phone: registerData.phone,
+        //   password: registerData.password,
+        //   role: "customer",
+        // }),
+        name: registerData.name,
+        email: registerData.email,
+        phone: registerData.phone,
+        password: registerData.password,
+        role: "customer",
+
       });
 
       const data = await res.json();
 
-      if (data.success) {
+      if (data.success) { 
         localStorage.setItem("user", JSON.stringify(data.user));
         redirectByRole(data.user.role);
       } else {
